@@ -2,6 +2,9 @@
     import { PUBLIC_API_ENDPOINT } from "$env/static/public";
     import { z } from "zod";
     import Modal from "./Modal.svelte";
+    import Image from "./Image.svelte";
+    import { onMount } from "svelte";
+    import { browser } from "$app/environment";
 
     export let activeCategory: string;
     let exclude: string[] = [];
@@ -34,7 +37,11 @@
     let showModal = false;
     let modalImage: string = "";
 
-    $: promiseImages = fetchImages(activeCategory);
+    let promiseImages: Promise<z.infer<typeof imagesSchema>> = Promise.resolve({
+        files: [],
+    });
+
+    $: if (browser) promiseImages = fetchImages(activeCategory);
 </script>
 
 <svelte:head>
@@ -51,14 +58,12 @@
     {#await promiseImages then images}
         {#each images.files as image}
             <!-- svelte-ignore a11y-no-noninteractive-element-interactions a11y-click-events-have-key-events -->
-            <img
-                class="max-w-xs object-cover object-top aspect-square m-3 cursor-pointer"
+            <Image
                 src={image}
                 on:click={() => {
                     showModal = true;
                     modalImage = image;
                 }}
-                alt=""
             />
         {/each}
     {/await}

@@ -3,6 +3,7 @@
     import Button from "../components/Button.svelte";
     import Loading from "../components/Loading.svelte";
     import { PUBLIC_API_ENDPOINT } from "$env/static/public";
+    import { onMount } from "svelte";
 
     export let activeCategory: string;
 
@@ -27,7 +28,11 @@
         }
     }
 
-    let categories = getCategories();
+    let categories: Promise<z.infer<typeof categorySchema>>;
+
+    onMount(() => {
+        categories = getCategories();
+    });
 
     function handleCategoryClick(category: string) {
         activeCategory = category;
@@ -38,14 +43,16 @@
     {#await categories}
         <Loading />
     {:then categories}
-        {#each categories.sfw as category}
-            <Button
-                active={activeCategory}
-                {category}
-                on:click={() => handleCategoryClick(category)}
-                >{category}</Button
-            >
-        {/each}
+        {#if categories}
+            {#each categories.sfw as category}
+                <Button
+                    active={activeCategory}
+                    {category}
+                    on:click={() => handleCategoryClick(category)}
+                    >{category}</Button
+                >
+            {/each}
+        {/if}
     {:catch}
         <p>Failed</p>
     {/await}
