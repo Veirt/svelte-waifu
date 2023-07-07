@@ -39,9 +39,9 @@
     }
 </script>
 
-<div class="flex justify-center flex-wrap flex-column">
+<div class="flex justify-center flex-wrap mt-5 mx-5">
     {#await categories}
-        <Loading />
+        <Loading class="border-accent" />
     {:then categories}
         {#if categories}
             {#each categories.sfw as category}

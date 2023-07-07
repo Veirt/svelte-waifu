@@ -6,7 +6,7 @@
 </script>
 
 <div class="flex justify-center">
-    <div class="max-w-6xl">
+    <div class="max-w-6xl flex justify-center flex-nowrap flex-col">
         <Category bind:activeCategory />
         <ImageList bind:activeCategory />
     </div>

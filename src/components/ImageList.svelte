@@ -3,7 +3,6 @@
     import { z } from "zod";
     import Modal from "./Modal.svelte";
     import Image from "./Image.svelte";
-    import { onMount } from "svelte";
     import { browser } from "$app/environment";
 
     export let activeCategory: string;
@@ -27,8 +26,8 @@
 
         try {
             const data = await response.json();
-            const images = imagesSchema.parse(data);
-            return images;
+            const parsedData = imagesSchema.parse(data);
+            return parsedData.files;
         } catch (err) {
             throw new Error(`Error when fetching images: ${err}`);
         }
@@ -37,9 +36,7 @@
     let showModal = false;
     let modalImage: string = "";
 
-    let promiseImages: Promise<z.infer<typeof imagesSchema>> = Promise.resolve({
-        files: [],
-    });
+    let promiseImages: Promise<string[]> = Promise.resolve([]);
 
     $: if (browser) promiseImages = fetchImages(activeCategory);
 </script>
@@ -56,7 +53,7 @@
 
 <div class="my-5 flex justify-center flex-wrap">
     {#await promiseImages then images}
-        {#each images.files as image}
+        {#each images as image}
             <!-- svelte-ignore a11y-no-noninteractive-element-interactions a11y-click-events-have-key-events -->
             <Image
                 src={image}

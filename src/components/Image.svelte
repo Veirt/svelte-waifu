@@ -1,5 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
+    import Loading from "./Loading.svelte";
 
     export let src: string;
 
@@ -35,8 +36,10 @@
     />
 {:else if loading}
     <div
-        class="max-w-xs w-full object-cover aspect-square m-3 bg-accent animate-pulse"
-    />
+        class="max-w-xs w-full object-cover aspect-square m-3 bg-accent animate-pulse flex justify-center items-center"
+    >
+        <Loading class="border-white" />
+    </div>
 {:else if failed}
     <img
         src="https://icon-library.com/images/not-found-icon/not-found-icon-20.jpg"
