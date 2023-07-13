@@ -67,5 +67,9 @@
 </div>
 
 <Modal bind:showModal>
-    <img class="aspect-auto max-w-xl max-h-screen" src={modalImage} alt="" />
+    <img
+        class="aspect-auto md:max-w-xl max-h-96 md:max-h-screen"
+        src={modalImage}
+        alt=""
+    />
 </Modal>
